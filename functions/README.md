@@ -11,7 +11,10 @@ Serverless HTTP API for FileVault. This is what **GitHub Actions** builds and de
 
 After a successful run:
 
-`https://<functionAppName>.azurewebsites.net/api/health` → `{"status":"ok","service":"filevault-functions"}`
+- `https://<functionAppName>.azurewebsites.net/api/health` → `{"status":"ok","service":"filevault-functions"}`
+- `GET https://<functionAppName>.azurewebsites.net/api/documents` → JSON array of documents (requires storage app settings in Azure; see Phase 2 in root `README.md`).
+
+**CORS (Angular on `http://localhost:4200`):** Portal → Function App → **API** → **CORS** → add `http://localhost:4200` (and your deployed site URL if applicable). Save.
 
 ## Local build
 
