@@ -20,7 +20,8 @@ After a successful run:
 
 ```bash
 cd functions
-mvn clean package
+mvn test          # unit tests only
+mvn clean package # tests + package for deploy
 ```
 
 ## Optional: deploy from your machine with Maven + Azure CLI

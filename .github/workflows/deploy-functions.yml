@@ -1,17 +1,7 @@
 # =============================================================================
-# GitHub Actions — deploy Java Azure Functions (no Azure CLI on your laptop)
+# GitHub Actions — Java Functions deploy (Maven tests, then package)
 # =============================================================================
-# One-time setup (GitHub repo → Settings → Secrets and variables → Actions):
-#
-#   AZURE_FUNCTIONAPP_NAME
-#       → Function App name only (the part before .azurewebsites.net)
-#
-#   AZURE_FUNCTIONAPP_PUBLISH_PROFILE
-#       → Azure Portal → Function App → Get publish profile
-#       → Open the .PublishSettings file → copy ALL XML → paste as secret
-#
-# Then push to `main` or `master` (or run workflow manually: Actions → this workflow → Run workflow).
-# After green run: https://YOUR_APP_NAME.azurewebsites.net/api/health
+# Secrets: AZURE_FUNCTIONAPP_NAME, AZURE_FUNCTIONAPP_PUBLISH_PROFILE (repo Settings → Actions).
 # =============================================================================
 
 name: Deploy Azure Functions
@@ -39,7 +29,7 @@ jobs:
           java-version: "17"
           cache: maven
 
-      - name: Build
+      - name: Functions — unit tests & package
         working-directory: functions
         run: mvn -B clean package
 
