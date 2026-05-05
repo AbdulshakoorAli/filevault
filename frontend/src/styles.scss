@@ -1,0 +1,33 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$filevault-primary: mat.define-palette(mat.$indigo-palette);
+$filevault-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$filevault-warn: mat.define-palette(mat.$red-palette);
+
+$filevault-theme: mat.define-light-theme((
+  color: (
+    primary: $filevault-primary,
+    accent: $filevault-accent,
+    warn: $filevault-warn,
+  )
+));
+
+@include mat.all-component-themes($filevault-theme);
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #fafafa;
+}
+
+.mat-mdc-snack-bar-container {
+  &.success-snackbar {
+    --mdc-snackbar-container-color: #4caf50;
+  }
+  &.error-snackbar {
+    --mdc-snackbar-container-color: #f44336;
+  }
+}

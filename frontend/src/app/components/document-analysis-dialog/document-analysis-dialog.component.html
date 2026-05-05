@@ -1,0 +1,95 @@
+<h2 mat-dialog-title>
+  <mat-icon class="title-icon">auto_awesome</mat-icon>
+  Document intelligence
+</h2>
+
+<mat-dialog-content>
+  <p class="file-name">{{ data.fileName }}</p>
+
+  @if (isLoading) {
+    <div class="state-row">
+      <mat-spinner diameter="32"></mat-spinner>
+      <span>Checking for existing analysis…</span>
+    </div>
+  }
+
+  @if (errorMessage) {
+    <div class="error-banner">{{ errorMessage }}</div>
+  }
+
+  <div class="actions-row">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="analyze()"
+      [disabled]="isAnalyzing">
+      @if (isAnalyzing) {
+        <mat-spinner diameter="20"></mat-spinner>
+        <span>Analyzing…</span>
+      } @else {
+        <mat-icon>psychology</mat-icon>
+        <span>Run analysis</span>
+      }
+    </button>
+  </div>
+
+  @if (analysis) {
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-value">{{ analysis.pageCount }}</span>
+        <span class="stat-label">Pages</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">{{ keyValueRows.length }}</span>
+        <span class="stat-label">Fields</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">{{ analysis.extractedText?.length ?? 0 }}</span>
+        <span class="stat-label">Characters</span>
+      </div>
+    </div>
+
+    @if (keyValueRows.length > 0) {
+      <h3>Extracted fields</h3>
+      <div class="table-wrap">
+        <table class="kv-table">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of keyValueRows; track $index) {
+              <tr>
+                <td class="kv-key">{{ row.key }}</td>
+                <td class="kv-value">{{ row.value }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    @if (analysis.extractedTables?.length) {
+      <h3>Tables</h3>
+      @for (t of analysis.extractedTables; track $index) {
+        <div class="table-card">
+          <p class="table-meta">{{ t.rowCount }} × {{ t.columnCount }}</p>
+          <pre class="cells">{{ t.cells.join(' | ') }}</pre>
+        </div>
+      }
+    }
+
+    <h3>Extracted text</h3>
+    <textarea class="extracted-text" rows="10" readonly [value]="analysis.extractedText"></textarea>
+
+    <p class="meta-line">Analyzed at {{ analysis.analyzedAt | date: 'medium' }}</p>
+  } @else if (!isLoading && !isAnalyzing) {
+    <p class="hint">No saved analysis yet. Run analysis to extract text and fields using Azure Document Intelligence.</p>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Close</button>
+</mat-dialog-actions>

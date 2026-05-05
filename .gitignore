@@ -1,0 +1,15 @@
+# Build output
+**/target/
+**/dist/
+**/node_modules/
+
+# IDE (IntelliJ / backend)
+.idea/
+*.iml
+
+# Azure Functions local secrets
+functions/local.settings.json
+
+# OS
+Thumbs.db
+.DS_Store

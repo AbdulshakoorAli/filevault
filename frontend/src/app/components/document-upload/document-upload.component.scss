@@ -1,0 +1,90 @@
+.upload-card {
+  margin-bottom: 24px;
+}
+
+.drop-zone {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 40px;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  background-color: #fafafa;
+
+  &:hover {
+    border-color: #3f51b5;
+    background-color: #f0f0f0;
+  }
+
+  &.dragging {
+    border-color: #3f51b5;
+    background-color: #e8eaf6;
+  }
+
+  &.uploading {
+    cursor: default;
+    border-color: #3f51b5;
+  }
+
+  .upload-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: #9e9e9e;
+  }
+
+  .drop-text {
+    font-size: 18px;
+    color: #666;
+    margin: 16px 0 8px;
+  }
+
+  .or-text {
+    color: #999;
+    margin: 8px 0 16px;
+  }
+}
+
+.upload-progress {
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: #3f51b5;
+    animation: pulse 1.5s infinite;
+  }
+
+  p {
+    margin: 16px 0;
+    font-size: 16px;
+    color: #3f51b5;
+  }
+
+  mat-progress-bar {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+}
+
+.selected-file {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 12px;
+  background-color: #e3f2fd;
+  border-radius: 4px;
+
+  mat-icon {
+    color: #1976d2;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

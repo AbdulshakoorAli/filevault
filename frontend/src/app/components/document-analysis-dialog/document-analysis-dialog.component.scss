@@ -1,0 +1,153 @@
+.title-icon {
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.file-name {
+  margin: 0 0 12px;
+  color: #5f6368;
+  font-size: 14px;
+}
+
+.state-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.error-banner {
+  background: #fdecea;
+  color: #c62828;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.actions-row {
+  margin-bottom: 16px;
+
+  button mat-spinner {
+    margin-right: 8px;
+  }
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.stats {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.stat {
+  flex: 1;
+  background: #e8f0fe;
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+}
+
+.stat-value {
+  display: block;
+  font-size: 22px;
+  font-weight: 600;
+  color: #1a73e8;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #5f6368;
+}
+
+h3 {
+  margin: 16px 0 8px;
+  font-size: 15px;
+}
+
+.table-wrap {
+  overflow: auto;
+  max-height: 220px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.kv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.kv-table th {
+  text-align: left;
+  padding: 8px 10px;
+  background: #1a73e8;
+  color: #fff;
+  position: sticky;
+  top: 0;
+}
+
+.kv-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #eee;
+  vertical-align: top;
+}
+
+.kv-key {
+  font-weight: 600;
+  width: 38%;
+}
+
+.table-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  background: #fafafa;
+}
+
+.table-meta {
+  margin: 0 0 6px;
+  font-size: 12px;
+  color: #5f6368;
+}
+
+.cells {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 12px;
+}
+
+.extracted-text {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-size: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  resize: vertical;
+}
+
+.meta-line {
+  margin: 12px 0 0;
+  font-size: 12px;
+  color: #5f6368;
+  text-align: right;
+}
+
+.hint {
+  color: #5f6368;
+  font-size: 14px;
+}
+
+mat-dialog-content {
+  min-width: min(520px, 92vw);
+  max-width: 720px;
+}

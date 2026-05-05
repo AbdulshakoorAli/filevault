@@ -1,0 +1,79 @@
+<app-document-upload (documentUploaded)="onDocumentUploaded($event)"></app-document-upload>
+
+<mat-card class="documents-card">
+  <mat-card-header>
+    <mat-card-title>
+      <mat-icon>folder</mat-icon>
+      Documents
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    @if (isLoading) {
+      <div class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Loading documents...</p>
+      </div>
+    } @else if (documents.length === 0) {
+      <div class="empty-state">
+        <mat-icon>cloud_upload</mat-icon>
+        <p>No documents uploaded yet</p>
+        <p class="hint">Upload your first document using the form above</p>
+      </div>
+    } @else {
+      <table mat-table [dataSource]="documents" class="documents-table">
+        <ng-container matColumnDef="fileName">
+          <th mat-header-cell *matHeaderCellDef>File Name</th>
+          <td mat-cell *matCellDef="let doc">
+            <div class="file-name-cell">
+              <mat-icon [color]="'primary'">{{ getFileIcon(doc.contentType) }}</mat-icon>
+              <span class="file-name">{{ doc.fileName }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="contentType">
+          <th mat-header-cell *matHeaderCellDef>Type</th>
+          <td mat-cell *matCellDef="let doc">{{ doc.contentType || 'Unknown' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="fileSize">
+          <th mat-header-cell *matHeaderCellDef>Size</th>
+          <td mat-cell *matCellDef="let doc">{{ formatFileSize(doc.fileSize) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="uploadedAt">
+          <th mat-header-cell *matHeaderCellDef>Uploaded</th>
+          <td mat-cell *matCellDef="let doc">{{ formatDate(doc.uploadedAt) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let doc">
+            <button mat-icon-button
+                    color="accent"
+                    (click)="openDocumentAnalysis(doc)"
+                    matTooltip="AI document analysis">
+              <mat-icon>auto_awesome</mat-icon>
+            </button>
+            <button mat-icon-button 
+                    color="primary" 
+                    (click)="getShareLink(doc)"
+                    matTooltip="Get share link">
+              <mat-icon>share</mat-icon>
+            </button>
+            <button mat-icon-button 
+                    color="warn" 
+                    (click)="confirmDelete(doc)"
+                    matTooltip="Delete">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    }
+  </mat-card-content>
+</mat-card>

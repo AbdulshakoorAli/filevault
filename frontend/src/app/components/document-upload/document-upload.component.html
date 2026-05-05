@@ -1,0 +1,43 @@
+<mat-card class="upload-card">
+  <mat-card-header>
+    <mat-card-title>Upload Document</mat-card-title>
+  </mat-card-header>
+  
+  <mat-card-content>
+    <div 
+      class="drop-zone"
+      [class.dragging]="isDragging"
+      [class.uploading]="isUploading"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)">
+      
+      @if (isUploading) {
+        <div class="upload-progress">
+          <mat-icon>cloud_upload</mat-icon>
+          <p>Uploading... {{ uploadProgress }}%</p>
+          <mat-progress-bar mode="determinate" [value]="uploadProgress"></mat-progress-bar>
+        </div>
+      } @else {
+        <mat-icon class="upload-icon">cloud_upload</mat-icon>
+        <p class="drop-text">Drag & drop files here</p>
+        <p class="or-text">or</p>
+        <button mat-raised-button color="primary" (click)="fileInput.click()">
+          Browse Files
+        </button>
+        <input 
+          #fileInput 
+          type="file" 
+          hidden 
+          (change)="onFileSelected($event)">
+      }
+    </div>
+
+    @if (selectedFile && !isUploading) {
+      <div class="selected-file">
+        <mat-icon>description</mat-icon>
+        <span>{{ selectedFile.name }} ({{ formatFileSize(selectedFile.size) }})</span>
+      </div>
+    }
+  </mat-card-content>
+</mat-card>
