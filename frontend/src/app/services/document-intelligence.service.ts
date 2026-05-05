@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DocumentAnalysisResult } from '../models/document-analysis.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DocumentIntelligenceService {
-  private readonly apiUrl = 'http://localhost:8080/api/documents';
+  private readonly apiUrl = environment.documentsApiUrl;
 
   constructor(private http: HttpClient) {}
 

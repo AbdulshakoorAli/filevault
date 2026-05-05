@@ -1,95 +1,49 @@
-package com.filevault.service;
+package com.filevault.functions.email;
 
 import com.azure.communication.email.EmailClient;
+import com.azure.communication.email.EmailClientBuilder;
 import com.azure.communication.email.models.EmailAddress;
 import com.azure.communication.email.models.EmailMessage;
 import com.azure.communication.email.models.EmailSendResult;
 import com.azure.core.util.polling.LongRunningOperationStatus;
 import com.azure.core.util.polling.PollResponse;
 import com.azure.core.util.polling.SyncPoller;
-import com.filevault.dto.EmailRequest;
-import com.filevault.dto.EmailResponse;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import com.filevault.functions.dto.EmailResultPayload;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
-@Slf4j
-@Service
-public class EmailService {
+public final class EmailHelper {
 
     private final EmailClient emailClient;
     private final String senderEmail;
 
-    public EmailService(EmailClient emailClient, @Qualifier("senderEmailAddress") String senderEmail) {
-        this.emailClient = emailClient;
+    public EmailHelper(String connectionString, String senderEmail) {
+        this.emailClient = new EmailClientBuilder().connectionString(connectionString).buildClient();
         this.senderEmail = senderEmail;
     }
 
-    public EmailResponse sendEmail(EmailRequest request) {
-        log.info("Sending email to: {} with subject: {}", request.getToEmail(), request.getSubject());
+    public EmailResultPayload sendShareLinkEmail(String recipientEmail, String fileName, String downloadUrl, int expiryHours) {
+        String subject = "FileVault: A file has been shared with you";
+        String body = buildShareLinkEmailBody(fileName, downloadUrl, expiryHours);
 
-        EmailMessage emailMessage = buildEmailMessage(request);
+        EmailMessage emailMessage = new EmailMessage()
+                .setSenderAddress(senderEmail)
+                .setToRecipients(new EmailAddress(recipientEmail))
+                .setSubject(subject)
+                .setBodyHtml(body);
 
         SyncPoller<EmailSendResult, EmailSendResult> poller = emailClient.beginSend(emailMessage);
-
         PollResponse<EmailSendResult> pollResponse = poller.waitForCompletion(Duration.ofMinutes(2));
         EmailSendResult result = pollResponse.getValue();
 
         if (pollResponse.getStatus() == LongRunningOperationStatus.SUCCESSFULLY_COMPLETED) {
-            log.info("Email sent successfully. Message ID: {}", result.getId());
-            return EmailResponse.builder()
-                    .messageId(result.getId())
-                    .status(result.getStatus().toString())
-                    .sentAt(LocalDateTime.now())
-                    .build();
-        } else {
-            log.error("Failed to send email. Status: {}", result.getStatus());
-            throw new RuntimeException("Failed to send email: " + result.getStatus());
+            return new EmailResultPayload(result.getId(), result.getStatus().toString(), LocalDateTime.now());
         }
+        throw new RuntimeException("Failed to send email: " + result.getStatus());
     }
 
-    public EmailResponse sendShareLinkEmail(String recipientEmail, String fileName, String downloadUrl, int expiryHours) {
-        String subject = "FileVault: A file has been shared with you";
-        String body = buildShareLinkEmailBody(fileName, downloadUrl, expiryHours);
-
-        EmailRequest request = EmailRequest.builder()
-                .toEmail(recipientEmail)
-                .subject(subject)
-                .body(body)
-                .isHtml(true)
-                .build();
-
-        return sendEmail(request);
-    }
-
-    private EmailMessage buildEmailMessage(EmailRequest request) {
-        EmailMessage emailMessage = new EmailMessage()
-                .setSenderAddress(senderEmail)
-                .setToRecipients(new EmailAddress(request.getToEmail()))
-                .setSubject(request.getSubject());
-
-        if (request.isHtml()) {
-            emailMessage.setBodyHtml(request.getBody());
-        } else {
-            emailMessage.setBodyPlainText(request.getBody());
-        }
-
-        if (request.getCcEmails() != null && !request.getCcEmails().isEmpty()) {
-            List<EmailAddress> ccAddresses = request.getCcEmails().stream()
-                    .map(EmailAddress::new)
-                    .collect(Collectors.toList());
-            emailMessage.setCcRecipients(ccAddresses);
-        }
-
-        return emailMessage;
-    }
-
-    private String buildShareLinkEmailBody(String fileName, String downloadUrl, int expiryHours) {
+    private static String buildShareLinkEmailBody(String fileName, String downloadUrl, int expiryHours) {
         return """
             <!DOCTYPE html>
             <html>

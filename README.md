@@ -1,14 +1,13 @@
 # FileVault — resume / document flow (Azure + GitHub)
 
-Angular frontend, **Azure Functions (Java)** for the serverless API in the cloud, and an optional **Spring Boot** `backend/` folder for local experiments only. Production-style deploy targets **Functions**, not the Spring app.
+Angular frontend and **Azure Functions (Java)** as the serverless API in the cloud. Run the UI against your deployed Function App (see environment files under `frontend/src/environments/`).
 
 ## Repo layout
 
 | Path | Role |
 |------|------|
-| `functions/` | **Serverless API** — build and deploy this to Azure Functions. |
-| `frontend/` | Angular UI — point it at your Function App URL when testing cloud. |
-| `backend/` | Optional legacy Spring API (local `http://localhost:8080`); not used by GitHub deploy. |
+| `functions/` | **Serverless API** — documents REST API (health, list, upload, download link, delete, share email, Document Intelligence). Deploy via GitHub Actions. |
+| `frontend/` | Angular UI — configure `documentsApiUrl` in `src/environments/` for your Function App. |
 | `.github/workflows/deploy-functions.yml` | **CI/CD** — build + deploy on push to `main` / `master`. |
 
 ## Deploy with GitHub Actions (recommended)
@@ -41,15 +40,7 @@ npm install
 ng serve
 ```
 
-Set the API base URL in `frontend/src/app/services/document.service.ts` (e.g. your Function App `https://<app>.azurewebsites.net/api/...` when calling Azure, or `http://localhost:8080` if you still run Spring locally).
-
-### Optional Spring backend (local only)
-
-```bash
-cd backend
-# set AZURE_STORAGE_CONNECTION_STRING (see backend/src/main/resources/application.yml)
-mvn spring-boot:run
-```
+Set **`documentsApiUrl`** in `frontend/src/environments/environment.development.ts` (for `ng serve`) and `environment.ts` (for production builds) to your Function App, e.g. `https://<your-app>.azurewebsites.net/api/documents`.
 
 ## Security
 
