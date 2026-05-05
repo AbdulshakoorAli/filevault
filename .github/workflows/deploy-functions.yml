@@ -43,10 +43,11 @@ jobs:
         working-directory: functions
         run: mvn -B clean package
 
+      # Maven puts host.json + functions inside target/azure-functions/<functionAppName>/ (see functions/pom.xml).
       - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
         with:
           app-name: ${{ secrets.AZURE_FUNCTIONAPP_NAME }}
-          package: functions/target/azure-functions
+          package: functions/target/azure-functions/filevault-functions
           publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
           respect-pom-xml: true

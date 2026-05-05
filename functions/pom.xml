@@ -16,8 +16,8 @@
         <java.version>17</java.version>
         <azure.functions.maven.plugin.version>1.31.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.1.0</azure.functions.java.library.version>
-        <!-- Replace via -DfunctionAppName=your-app or edit this default once -->
-        <functionAppName>YOUR_FUNCTION_APP_NAME</functionAppName>
+        <!-- Staging folder under target/azure-functions/ — must match CI package path in deploy-functions.yml -->
+        <functionAppName>filevault-functions</functionAppName>
         <functionResourceGroup>YOUR_RESOURCE_GROUP</functionResourceGroup>
         <functionRegion>westeurope</functionRegion>
     </properties>
