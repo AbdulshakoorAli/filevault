@@ -2,32 +2,197 @@
 
 @include mat.core();
 
-$filevault-primary: mat.define-palette(mat.$indigo-palette);
-$filevault-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
-$filevault-warn: mat.define-palette(mat.$red-palette);
+// --- Custom dark palette built from the user's theme tokens ---
+$fv-primary-map: (
+  50: #e0efff, 100: #b3d4ff, 200: #80b8ff, 300: #4d9cff,
+  400: #268fe6, 500: #0078D4, 600: #006bbd, 700: #005da6,
+  800: #004f8f, 900: #003666,
+  contrast: (500: #fff, 700: #fff, 900: #fff)
+);
+$fv-accent-map: (
+  50: #e0faff, 100: #b3f2ff, 200: #80eaff, 300: #50E6FF,
+  400: #33d6f0, 500: #50E6FF, 600: #00c4e6, 700: #00a8c6,
+  800: #008da6, 900: #006680,
+  contrast: (500: #020617, 700: #020617, 900: #fff)
+);
+$fv-warn-map: (
+  50: #fdecea, 100: #f9c4bf, 200: #f49b93, 300: #ef7268,
+  400: #ef5350, 500: #ef4444, 600: #d63b3b, 700: #bd3232,
+  800: #a32929, 900: #7f1d1d,
+  contrast: (500: #fff, 700: #fff, 900: #fff)
+);
 
-$filevault-theme: mat.define-light-theme((
-  color: (
-    primary: $filevault-primary,
-    accent: $filevault-accent,
-    warn: $filevault-warn,
-  )
+$fv-primary: mat.define-palette($fv-primary-map, 500, 300, 700);
+$fv-accent:  mat.define-palette($fv-accent-map, 500, 300, 700);
+$fv-warn:    mat.define-palette($fv-warn-map, 500, 300, 700);
+
+$fv-dark-theme: mat.define-dark-theme((
+  color: (primary: $fv-primary, accent: $fv-accent, warn: $fv-warn)
 ));
 
-@include mat.all-component-themes($filevault-theme);
+@include mat.all-component-themes($fv-dark-theme);
+
+// ---- Design tokens ----
+:root {
+  --bg-primary:   #020617;
+  --bg-card:      rgba(30, 41, 59, 0.6);
+  --bg-card-solid:#1e293b;
+  --blur:         20px;
+  --accent:       #0078D4;
+  --accent-light: #50E6FF;
+  --success:      #10b981;
+  --danger:       #ef4444;
+  --text:         #e2e8f0;
+  --text-muted:   #94a3b8;
+  --border:       rgba(148,163,184,0.12);
+  --radius:       16px;
+  --radius-sm:    10px;
+  --glow-accent:  0 0 30px rgba(0,120,212,0.25);
+  --glow-cyan:    0 0 30px rgba(80,230,255,0.18);
+  --font:         'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+// ---- Reset / global ----
+*, *::before, *::after { box-sizing: border-box; }
 
 html, body {
   height: 100%;
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: #fafafa;
+  font-family: var(--font);
+  background: var(--bg-primary);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-image:
+    radial-gradient(ellipse 80% 60% at 50% -20%, rgba(0,120,212,0.15), transparent),
+    radial-gradient(ellipse 60% 50% at 80% 100%, rgba(80,230,255,0.08), transparent);
+  background-attachment: fixed;
+}
+
+a { color: var(--accent-light); }
+
+// ---- Scrollbar ----
+::-webkit-scrollbar        { width: 6px; height: 6px; }
+::-webkit-scrollbar-track  { background: transparent; }
+::-webkit-scrollbar-thumb  { background: rgba(148,163,184,0.25); border-radius: 3px; }
+
+// ---- Material overrides (dark glass) ----
+.mat-mdc-card {
+  background: var(--bg-card) !important;
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border: 1px solid var(--border);
+  border-radius: var(--radius) !important;
+  color: var(--text) !important;
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  background: var(--bg-card-solid) !important;
+  backdrop-filter: blur(var(--blur));
+  border: 1px solid var(--border);
+  border-radius: var(--radius) !important;
+  color: var(--text) !important;
+}
+
+.mat-mdc-table {
+  background: transparent !important;
+}
+
+.mat-mdc-header-cell {
+  color: var(--text-muted) !important;
+  font-weight: 600 !important;
+  font-size: 12px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom-color: var(--border) !important;
+}
+
+.mat-mdc-cell {
+  color: var(--text) !important;
+  border-bottom-color: var(--border) !important;
+}
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  background: rgba(0,120,212,0.06);
+}
+
+.mat-toolbar.mat-primary {
+  background: rgba(2,6,23,0.85) !important;
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+
+.mat-mdc-raised-button.mat-primary {
+  background: var(--accent) !important;
+  color: #fff !important;
+  border-radius: var(--radius-sm) !important;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  &:hover {
+    box-shadow: var(--glow-accent);
+    transform: translateY(-1px);
+  }
+}
+
+.mat-mdc-icon-button {
+  transition: transform 0.2s ease, color 0.2s ease;
+  &:hover { transform: scale(1.15); }
+}
+
+.mat-mdc-tab-group {
+  --mdc-tab-indicator-active-indicator-color: var(--accent-light);
+  --mat-tab-header-active-label-text-color: var(--accent-light);
+  --mat-tab-header-inactive-label-text-color: var(--text-muted);
+}
+
+.mat-mdc-form-field {
+  --mdc-outlined-text-field-outline-color: var(--border);
+  --mdc-outlined-text-field-focus-outline-color: var(--accent);
+  --mdc-outlined-text-field-hover-outline-color: rgba(0,120,212,0.4);
+  --mdc-outlined-text-field-label-text-color: var(--text-muted);
+  --mdc-outlined-text-field-input-text-color: var(--text);
+  --mdc-outlined-text-field-focus-label-text-color: var(--accent-light);
+}
+
+.mat-mdc-progress-bar {
+  --mdc-linear-progress-active-indicator-color: var(--accent-light);
+  --mdc-linear-progress-track-color: rgba(80,230,255,0.12);
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .mat-mdc-snack-bar-container {
   &.success-snackbar {
-    --mdc-snackbar-container-color: #4caf50;
+    --mdc-snackbar-container-color: var(--success);
+    --mdc-snackbar-supporting-text-color: #fff;
   }
   &.error-snackbar {
-    --mdc-snackbar-container-color: #f44336;
+    --mdc-snackbar-container-color: var(--danger);
+    --mdc-snackbar-supporting-text-color: #fff;
   }
+}
+
+// ---- Reusable animations ----
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 12px rgba(80,230,255,0.15); }
+  50%      { box-shadow: 0 0 28px rgba(80,230,255,0.35); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-in {
+  animation: fadeInUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }

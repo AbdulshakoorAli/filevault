@@ -1,70 +1,63 @@
-<h2 mat-dialog-title>
+<h2 mat-dialog-title class="dialog-title">
   <mat-icon class="title-icon">auto_awesome</mat-icon>
-  Document intelligence
+  Document Intelligence
 </h2>
 
 <mat-dialog-content>
-  <p class="file-name">{{ data.fileName }}</p>
+  <p class="file-label">{{ data.fileName }}</p>
 
   @if (isLoading) {
     <div class="state-row">
-      <mat-spinner diameter="32"></mat-spinner>
-      <span>Checking for existing analysis…</span>
+      <mat-spinner diameter="28"></mat-spinner>
+      <span>Checking for existing analysis&hellip;</span>
     </div>
   }
 
   @if (errorMessage) {
-    <div class="error-banner">{{ errorMessage }}</div>
+    <div class="error-banner">
+      <mat-icon>error_outline</mat-icon>
+      {{ errorMessage }}
+    </div>
   }
 
   <div class="actions-row">
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="analyze()"
-      [disabled]="isAnalyzing">
+    <button mat-raised-button color="primary" (click)="analyze()" [disabled]="isAnalyzing">
       @if (isAnalyzing) {
-        <mat-spinner diameter="20"></mat-spinner>
-        <span>Analyzing…</span>
+        <mat-spinner diameter="18"></mat-spinner>
+        <span>Analyzing&hellip;</span>
       } @else {
         <mat-icon>psychology</mat-icon>
-        <span>Run analysis</span>
+        <span>Run Analysis</span>
       }
     </button>
   </div>
 
   @if (analysis) {
-    <div class="stats">
-      <div class="stat">
+    <div class="stats-row">
+      <div class="stat-card">
         <span class="stat-value">{{ analysis.pageCount }}</span>
         <span class="stat-label">Pages</span>
       </div>
-      <div class="stat">
+      <div class="stat-card">
         <span class="stat-value">{{ keyValueRows.length }}</span>
         <span class="stat-label">Fields</span>
       </div>
-      <div class="stat">
+      <div class="stat-card">
         <span class="stat-value">{{ analysis.extractedText?.length ?? 0 }}</span>
         <span class="stat-label">Characters</span>
       </div>
     </div>
 
     @if (keyValueRows.length > 0) {
-      <h3>Extracted fields</h3>
-      <div class="table-wrap">
+      <h3 class="section-heading">Extracted Fields</h3>
+      <div class="kv-wrap">
         <table class="kv-table">
           <thead>
-            <tr>
-              <th>Field</th>
-              <th>Value</th>
-            </tr>
+            <tr><th>Field</th><th>Value</th></tr>
           </thead>
           <tbody>
             @for (row of keyValueRows; track $index) {
-              <tr>
-                <td class="kv-key">{{ row.key }}</td>
-                <td class="kv-value">{{ row.value }}</td>
-              </tr>
+              <tr><td class="kv-key">{{ row.key }}</td><td>{{ row.value }}</td></tr>
             }
           </tbody>
         </table>
@@ -72,18 +65,17 @@
     }
 
     @if (analysis.extractedTables?.length) {
-      <h3>Tables</h3>
+      <h3 class="section-heading">Tables</h3>
       @for (t of analysis.extractedTables; track $index) {
-        <div class="table-card">
-          <p class="table-meta">{{ t.rowCount }} × {{ t.columnCount }}</p>
+        <div class="table-card-inner">
+          <p class="table-meta">{{ t.rowCount }} &times; {{ t.columnCount }}</p>
           <pre class="cells">{{ t.cells.join(' | ') }}</pre>
         </div>
       }
     }
 
-    <h3>Extracted text</h3>
+    <h3 class="section-heading">Extracted Text</h3>
     <textarea class="extracted-text" rows="10" readonly [value]="analysis.extractedText"></textarea>
-
     <p class="meta-line">Analyzed at {{ analysis.analyzedAt | date: 'medium' }}</p>
   } @else if (!isLoading && !isAnalyzing) {
     <p class="hint">No saved analysis yet. Run analysis to extract text and fields using Azure Document Intelligence.</p>
@@ -91,5 +83,5 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button (click)="close()">Close</button>
+  <button mat-button (click)="close()" class="close-btn">Close</button>
 </mat-dialog-actions>
