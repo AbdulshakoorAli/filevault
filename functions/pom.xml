@@ -22,6 +22,21 @@
         <functionRegion>westeurope</functionRegion>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.azure</groupId>
+                <artifactId>azure-core</artifactId>
+                <version>1.54.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.azure</groupId>
+                <artifactId>azure-core-http-netty</artifactId>
+                <version>1.15.7</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>com.microsoft.azure.functions</groupId>
@@ -30,8 +45,27 @@
         </dependency>
         <dependency>
             <groupId>com.azure</groupId>
+            <artifactId>azure-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.azure</groupId>
             <artifactId>azure-storage-blob</artifactId>
             <version>12.25.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-data-tables</artifactId>
+            <version>12.5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-communication-email</artifactId>
+            <version>1.0.15</version>
+        </dependency>
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-ai-formrecognizer</artifactId>
+            <version>4.1.9</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -43,6 +77,12 @@
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>2.17.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -53,6 +93,24 @@
                 <version>3.11.0</version>
                 <configuration>
                     <release>${java.version}</release>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
+            <!-- OWASP Dependency-Check: scans dependencies for known CVEs -->
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>10.0.3</version>
+                <configuration>
+                    <failBuildOnCVSS>9</failBuildOnCVSS>
+                    <formats>
+                        <format>HTML</format>
+                        <format>JSON</format>
+                    </formats>
                 </configuration>
             </plugin>
             <plugin>
