@@ -151,3 +151,153 @@ mat-dialog-content {
   min-width: min(520px, 92vw);
   max-width: 720px;
 }
+
+/* Job Description Input */
+.jd-section {
+  margin: 12px 0;
+}
+
+.jd-field {
+  width: 100%;
+}
+
+/* Job Fit Dashboard */
+.jf-dashboard {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  border: 1px solid #e0e0e0;
+}
+
+.jf-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px 0;
+  color: #1976d2;
+}
+
+.ats-score-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.ats-label {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.ats-value {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.ats-max {
+  font-size: 20px;
+  color: #999;
+}
+
+.jf-section {
+  background: white;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.jf-section h4 {
+  margin: 0 0 10px 0;
+  color: #444;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.skill-group {
+  margin-bottom: 10px;
+}
+
+.skill-group-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.matched-label { color: #4caf50; }
+.missing-label { color: #f44336; }
+.bonus-label { color: #1976d2; }
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.chip-matched { background: #e8f5e9; color: #2e7d32; }
+.chip-missing { background: #ffebee; color: #c62828; }
+.chip-bonus   { background: #e3f2fd; color: #1565c0; }
+
+.eval-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.eval-item {
+  font-size: 13px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: #f5f5f5;
+}
+
+.eval-item.pass { background: #e8f5e9; color: #2e7d32; }
+.eval-item.fail { background: #ffebee; color: #c62828; }
+
+.eval-note {
+  font-size: 13px;
+  color: #666;
+  margin: 6px 0 0 0;
+  font-style: italic;
+}
+
+.verdict-section {
+  border-left: 4px solid #1976d2;
+}
+
+.verdict-text {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.fixes-list {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.fixes-list li {
+  font-size: 13px;
+  color: #444;
+  margin-bottom: 6px;
+  line-height: 1.5;
+}

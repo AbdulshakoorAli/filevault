@@ -13,3 +13,9 @@ functions/local.settings.json
 # OS
 Thumbs.db
 .DS_Store
+
+azure-settings.json
+
+.tools/
+azure-settings.json
+target/

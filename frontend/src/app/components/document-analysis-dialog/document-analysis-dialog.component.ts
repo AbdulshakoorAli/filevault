@@ -1,10 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { DocumentIntelligenceService } from '../../services/document-intelligence.service';
 import { DocumentAnalysisResult } from '../../models/document-analysis.model';
 
@@ -18,11 +21,14 @@ export interface DocumentAnalysisDialogData {
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     MatDialogModule,
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   templateUrl: './document-analysis-dialog.component.html',
   styleUrls: ['./document-analysis-dialog.component.scss']
@@ -33,6 +39,7 @@ export class DocumentAnalysisDialogComponent implements OnInit {
   isLoading = false;
   isAnalyzing = false;
   errorMessage = '';
+  jobDescription = '';
 
   constructor(
     public dialogRef: MatDialogRef<DocumentAnalysisDialogComponent>,
@@ -52,7 +59,7 @@ export class DocumentAnalysisDialogComponent implements OnInit {
   analyze(): void {
     this.isAnalyzing = true;
     this.errorMessage = '';
-    this.intelligenceService.analyzeDocument(this.data.blobName).subscribe({
+    this.intelligenceService.analyzeDocument(this.data.blobName, this.jobDescription).subscribe({
       next: (result) => {
         this.applyResult(result);
         this.isAnalyzing = false;
@@ -69,6 +76,12 @@ export class DocumentAnalysisDialogComponent implements OnInit {
         this.snackBar.open(this.errorMessage, 'Close', { duration: 6000 });
       }
     });
+  }
+
+  getAtsColor(score: number): string {
+    if (score >= 75) return '#4caf50';
+    if (score >= 50) return '#ff9800';
+    return '#f44336';
   }
 
   private loadExistingAnalysis(): void {

@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>
   <mat-icon class="title-icon">auto_awesome</mat-icon>
-  Document intelligence
+  Document Intelligence
 </h2>
 
 <mat-dialog-content>
@@ -16,6 +16,19 @@
   @if (errorMessage) {
     <div class="error-banner">{{ errorMessage }}</div>
   }
+
+  <!-- Job Description Input -->
+  <div class="jd-section">
+    <mat-form-field appearance="outline" class="jd-field">
+      <mat-label>Job Description (optional)</mat-label>
+      <textarea
+        matInput
+        [(ngModel)]="jobDescription"
+        rows="4"
+        placeholder="Paste the job description here to get AI-powered resume fit analysis, ATS score, skill matching and recommendations...">
+      </textarea>
+    </mat-form-field>
+  </div>
 
   <div class="actions-row">
     <button
@@ -34,6 +47,7 @@
   </div>
 
   @if (analysis) {
+    <!-- Doc AI Stats -->
     <div class="stats">
       <div class="stat">
         <span class="stat-value">{{ analysis.pageCount }}</span>
@@ -49,6 +63,146 @@
       </div>
     </div>
 
+    <!-- Job Fit Dashboard -->
+    @if (analysis.jobFitAnalysis) {
+      <div class="jf-dashboard">
+        <h3 class="jf-title">
+          <mat-icon>analytics</mat-icon>
+          Job Fit Analysis
+        </h3>
+
+        <!-- ATS Score -->
+        <div class="ats-score-card">
+          <span class="ats-label">ATS Score</span>
+          <span class="ats-value" [style.color]="getAtsColor(analysis.jobFitAnalysis.atsScore)">
+            {{ analysis.jobFitAnalysis.atsScore }}<span class="ats-max">/100</span>
+          </span>
+        </div>
+
+        <!-- Skill Match -->
+        <div class="jf-section">
+          <h4>Skill Match</h4>
+          @if (analysis.jobFitAnalysis.skillMatch.matched.length > 0) {
+            <div class="skill-group">
+              <span class="skill-group-label matched-label">✅ Matched</span>
+              <div class="chips">
+                @for (skill of analysis.jobFitAnalysis.skillMatch.matched; track $index) {
+                  <span class="chip chip-matched">{{ skill }}</span>
+                }
+              </div>
+            </div>
+          }
+          @if (analysis.jobFitAnalysis.skillMatch.missing.length > 0) {
+            <div class="skill-group">
+              <span class="skill-group-label missing-label">❌ Missing</span>
+              <div class="chips">
+                @for (skill of analysis.jobFitAnalysis.skillMatch.missing; track $index) {
+                  <span class="chip chip-missing">{{ skill }}</span>
+                }
+              </div>
+            </div>
+          }
+          @if (analysis.jobFitAnalysis.skillMatch.bonus.length > 0) {
+            <div class="skill-group">
+              <span class="skill-group-label bonus-label">⭐ Bonus</span>
+              <div class="chips">
+                @for (skill of analysis.jobFitAnalysis.skillMatch.bonus; track $index) {
+                  <span class="chip chip-bonus">{{ skill }}</span>
+                }
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Education -->
+        <div class="jf-section">
+          <h4>Education</h4>
+          <div class="eval-grid">
+            <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.educationEvaluation.meetsRequirement" [class.fail]="!analysis.jobFitAnalysis.educationEvaluation.meetsRequirement">
+              {{ analysis.jobFitAnalysis.educationEvaluation.meetsRequirement ? '✅' : '❌' }} Meets Requirement
+            </span>
+            <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.educationEvaluation.degreeRelevant" [class.fail]="!analysis.jobFitAnalysis.educationEvaluation.degreeRelevant">
+              {{ analysis.jobFitAnalysis.educationEvaluation.degreeRelevant ? '✅' : '❌' }} Degree Relevant
+            </span>
+            <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.educationEvaluation.isComplete" [class.fail]="!analysis.jobFitAnalysis.educationEvaluation.isComplete">
+              {{ analysis.jobFitAnalysis.educationEvaluation.isComplete ? '✅' : '❌' }} Complete
+            </span>
+          </div>
+          @if (analysis.jobFitAnalysis.educationEvaluation.certificationsFound.length > 0) {
+            <p class="eval-note">Certifications: {{ analysis.jobFitAnalysis.educationEvaluation.certificationsFound.join(', ') }}</p>
+          }
+          <p class="eval-note">{{ analysis.jobFitAnalysis.educationEvaluation.notes }}</p>
+        </div>
+
+        <!-- Experience -->
+        <div class="jf-section">
+          <h4>Experience</h4>
+          <div class="eval-grid">
+            <span class="eval-item">📅 {{ analysis.jobFitAnalysis.experienceEvaluation.yearsFound }} years found</span>
+            <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.experienceEvaluation.meetsRequirement" [class.fail]="!analysis.jobFitAnalysis.experienceEvaluation.meetsRequirement">
+              {{ analysis.jobFitAnalysis.experienceEvaluation.meetsRequirement ? '✅' : '❌' }} Meets Requirement
+            </span>
+            <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.experienceEvaluation.domainRelevant" [class.fail]="!analysis.jobFitAnalysis.experienceEvaluation.domainRelevant">
+              {{ analysis.jobFitAnalysis.experienceEvaluation.domainRelevant ? '✅' : '❌' }} Domain Relevant
+            </span>
+            <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.experienceEvaluation.achievementsQuantified" [class.fail]="!analysis.jobFitAnalysis.experienceEvaluation.achievementsQuantified">
+              {{ analysis.jobFitAnalysis.experienceEvaluation.achievementsQuantified ? '✅' : '❌' }} Achievements Quantified
+            </span>
+            <span class="eval-item" [class.fail]="analysis.jobFitAnalysis.experienceEvaluation.employmentGapsFound">
+              {{ analysis.jobFitAnalysis.experienceEvaluation.employmentGapsFound ? '⚠️ Gaps Found' : '✅ No Gaps' }}
+            </span>
+          </div>
+          <p class="eval-note">{{ analysis.jobFitAnalysis.experienceEvaluation.notes }}</p>
+        </div>
+
+        <!-- Completeness -->
+        <div class="jf-section">
+          <h4>Resume Completeness</h4>
+          <div class="eval-grid">
+            <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.completenessCheck.hasContactInfo" [class.fail]="!analysis.jobFitAnalysis.completenessCheck.hasContactInfo">
+              {{ analysis.jobFitAnalysis.completenessCheck.hasContactInfo ? '✅' : '❌' }} Contact Info
+            </span>
+            <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.completenessCheck.hasSummary" [class.fail]="!analysis.jobFitAnalysis.completenessCheck.hasSummary">
+              {{ analysis.jobFitAnalysis.completenessCheck.hasSummary ? '✅' : '❌' }} Summary
+            </span>
+            <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.completenessCheck.hasWorkExperience" [class.fail]="!analysis.jobFitAnalysis.completenessCheck.hasWorkExperience">
+              {{ analysis.jobFitAnalysis.completenessCheck.hasWorkExperience ? '✅' : '❌' }} Work Experience
+            </span>
+            <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.completenessCheck.hasSkills" [class.fail]="!analysis.jobFitAnalysis.completenessCheck.hasSkills">
+              {{ analysis.jobFitAnalysis.completenessCheck.hasSkills ? '✅' : '❌' }} Skills
+            </span>
+            <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.completenessCheck.hasEducation" [class.fail]="!analysis.jobFitAnalysis.completenessCheck.hasEducation">
+              {{ analysis.jobFitAnalysis.completenessCheck.hasEducation ? '✅' : '❌' }} Education
+            </span>
+            <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.completenessCheck.hasCertifications" [class.fail]="!analysis.jobFitAnalysis.completenessCheck.hasCertifications">
+              {{ analysis.jobFitAnalysis.completenessCheck.hasCertifications ? '✅' : '❌' }} Certifications
+            </span>
+            <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.completenessCheck.hasProjects" [class.fail]="!analysis.jobFitAnalysis.completenessCheck.hasProjects">
+              {{ analysis.jobFitAnalysis.completenessCheck.hasProjects ? '✅' : '❌' }} Projects
+            </span>
+          </div>
+        </div>
+
+        <!-- Final Verdict -->
+        <div class="jf-section verdict-section">
+          <h4>Final Verdict</h4>
+          <p class="verdict-text">{{ analysis.jobFitAnalysis.finalVerdict }}</p>
+        </div>
+
+        <!-- Top 3 Fixes -->
+        <div class="jf-section">
+          <h4>Top 3 Things to Fix</h4>
+          <ol class="fixes-list">
+            @for (fix of analysis.jobFitAnalysis.topThreeFixes; track $index) {
+              <li>{{ fix }}</li>
+            }
+          </ol>
+        </div>
+
+      </div>
+    }
+
+    <!-- Extracted Fields -->
     @if (keyValueRows.length > 0) {
       <h3>Extracted fields</h3>
       <div class="table-wrap">
@@ -83,8 +237,8 @@
 
     <h3>Extracted text</h3>
     <textarea class="extracted-text" rows="10" readonly [value]="analysis.extractedText"></textarea>
-
     <p class="meta-line">Analyzed at {{ analysis.analyzedAt | date: 'medium' }}</p>
+
   } @else if (!isLoading && !isAnalyzing) {
     <p class="hint">No saved analysis yet. Run analysis to extract text and fields using Azure Document Intelligence.</p>
   }
