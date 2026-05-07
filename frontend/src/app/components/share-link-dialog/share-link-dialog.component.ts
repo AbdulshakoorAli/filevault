@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Clipboard, ClipboardModule } from '@angular/cdk/clipboard';
 import { DocumentService } from '../../services/document.service';
 
@@ -23,38 +24,40 @@ export interface ShareLinkDialogData {
   selector: 'app-share-link-dialog',
   standalone: true,
   imports: [
-    CommonModule,
-    FormsModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSnackBarModule,
-    MatTabsModule,
-    MatProgressSpinnerModule,
+    CommonModule, FormsModule,
+    MatDialogModule, MatButtonModule, MatIconModule,
+    MatFormFieldModule, MatInputModule, MatSnackBarModule,
+    MatTabsModule, MatProgressSpinnerModule, MatTooltipModule,
     ClipboardModule
   ],
   template: `
-    <h2 mat-dialog-title>Share "{{ data.fileName }}"</h2>
+    <h2 mat-dialog-title class="share-title">
+      <mat-icon class="title-icon">share</mat-icon>
+      Share "{{ data.fileName }}"
+    </h2>
+
     <mat-dialog-content>
-      <mat-tab-group>
-        <mat-tab label="Copy Link">
-          <div class="tab-content">
-            <mat-form-field appearance="outline" class="link-field">
+      <mat-tab-group animationDuration="300ms">
+        <!-- Copy Link tab -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon>link</mat-icon>&nbsp;Copy Link
+          </ng-template>
+          <div class="tab-body">
+            <mat-form-field appearance="outline" class="full-width">
               <mat-label>Download Link</mat-label>
               <input matInput [value]="data.downloadUrl" readonly>
-              <button mat-icon-button matSuffix (click)="copyLink()" matTooltip="Copy link">
+              <button mat-icon-button matSuffix (click)="copyLink()" matTooltip="Copy">
                 <mat-icon>content_copy</mat-icon>
               </button>
             </mat-form-field>
 
-            <p class="expiry-info">
+            <p class="expiry-row">
               <mat-icon>schedule</mat-icon>
-              <span>Link expires: {{ formatDate(data.expiresAt) }}</span>
+              Expires: {{ formatDate(data.expiresAt) }}
             </p>
 
-            <div class="actions">
+            <div class="actions-right">
               <button mat-raised-button color="primary" (click)="copyLink()">
                 <mat-icon>content_copy</mat-icon>
                 Copy Link
@@ -63,109 +66,113 @@ export interface ShareLinkDialogData {
           </div>
         </mat-tab>
 
-        <mat-tab label="Send via Email">
-          <div class="tab-content">
-            <mat-form-field appearance="outline" class="email-field">
+        <!-- Email tab -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon>email</mat-icon>&nbsp;Email
+          </ng-template>
+          <div class="tab-body">
+            <mat-form-field appearance="outline" class="full-width">
               <mat-label>Recipient Email</mat-label>
-              <input matInput 
-                     type="email" 
-                     [(ngModel)]="recipientEmail" 
-                     placeholder="Enter email address"
-                     [disabled]="isSending">
               <mat-icon matPrefix>email</mat-icon>
+              <input matInput type="email" [(ngModel)]="recipientEmail"
+                     placeholder="user&#64;example.com" [disabled]="isSending">
             </mat-form-field>
 
-            <p class="info-text">
-              <mat-icon>info</mat-icon>
-              <span>The recipient will receive an email with a secure download link that expires in 24 hours.</span>
+            <p class="info-row">
+              <mat-icon>info_outline</mat-icon>
+              Recipient gets a secure download link valid for 24 hours.
             </p>
 
-            <div class="actions">
-              <button mat-raised-button 
-                      color="primary" 
+            <div class="actions-right">
+              <button mat-raised-button color="primary"
                       (click)="sendEmail()"
                       [disabled]="!isValidEmail() || isSending">
-                <mat-spinner *ngIf="isSending" diameter="20"></mat-spinner>
+                <mat-spinner *ngIf="isSending" diameter="18"></mat-spinner>
                 <mat-icon *ngIf="!isSending">send</mat-icon>
-                {{ isSending ? 'Sending...' : 'Send Email' }}
+                {{ isSending ? 'Sending…' : 'Send Email' }}
               </button>
             </div>
 
-            <div *ngIf="emailSent" class="success-message">
+            <div *ngIf="emailSent" class="success-banner">
               <mat-icon>check_circle</mat-icon>
-              <span>Email sent successfully!</span>
+              Email sent successfully!
             </div>
           </div>
         </mat-tab>
       </mat-tab-group>
     </mat-dialog-content>
+
     <mat-dialog-actions align="end">
-      <button mat-button (click)="close()">Close</button>
+      <button mat-button (click)="close()" class="close-btn">Close</button>
     </mat-dialog-actions>
   `,
   styles: [`
-    .tab-content {
-      padding: 20px 0;
+    .share-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      color: var(--text);
     }
 
-    .link-field, .email-field {
-      width: 100%;
-    }
+    .title-icon { color: var(--accent-light); }
 
-    .expiry-info, .info-text {
+    .tab-body { padding: 20px 0 4px; }
+    .full-width { width: 100%; }
+
+    .expiry-row, .info-row {
       display: flex;
       align-items: flex-start;
       gap: 8px;
-      color: #666;
-      margin-top: 8px;
-      font-size: 14px;
+      color: var(--text-muted);
+      font-size: 13px;
+      margin: 4px 0 12px;
 
       mat-icon {
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
         flex-shrink: 0;
+        margin-top: 2px;
       }
     }
 
-    .actions {
-      margin-top: 16px;
+    .actions-right {
       display: flex;
       justify-content: flex-end;
+      margin-top: 8px;
 
       button {
-        display: flex;
+        display: inline-flex;
         align-items: center;
         gap: 8px;
       }
 
-      mat-spinner {
-        margin-right: 4px;
-      }
+      mat-spinner { margin-right: 4px; }
     }
 
-    .success-message {
+    .success-banner {
       display: flex;
       align-items: center;
-      gap: 8px;
-      color: #4caf50;
+      gap: 10px;
       margin-top: 16px;
-      padding: 12px;
-      background: #e8f5e9;
-      border-radius: 4px;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      color: var(--success);
+      font-weight: 500;
+      animation: fadeInUp 0.3s ease both;
 
-      mat-icon {
-        color: #4caf50;
-      }
+      mat-icon { color: var(--success); }
     }
 
-    mat-dialog-content {
-      min-width: 450px;
-    }
+    .close-btn { color: var(--text-muted) !important; }
 
-    ::ng-deep .mat-mdc-tab-body-wrapper {
-      padding-top: 8px;
-    }
+    mat-dialog-content { min-width: min(460px, 92vw); }
+
+    ::ng-deep .mat-mdc-tab-body-wrapper { padding-top: 4px; }
   `]
 })
 export class ShareLinkDialogComponent {
@@ -183,9 +190,7 @@ export class ShareLinkDialogComponent {
 
   copyLink(): void {
     this.clipboard.copy(this.data.downloadUrl);
-    this.snackBar.open('Link copied to clipboard!', 'Close', {
-      duration: 2000
-    });
+    this.snackBar.open('Link copied!', 'Close', { duration: 2000 });
   }
 
   formatDate(dateStr: string): string {
@@ -193,18 +198,14 @@ export class ShareLinkDialogComponent {
   }
 
   isValidEmail(): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(this.recipientEmail);
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.recipientEmail);
   }
 
   sendEmail(): void {
     if (!this.isValidEmail()) {
-      this.snackBar.open('Please enter a valid email address', 'Close', {
-        duration: 3000
-      });
+      this.snackBar.open('Enter a valid email', 'Close', { duration: 3000 });
       return;
     }
-
     this.isSending = true;
     this.emailSent = false;
 
@@ -212,19 +213,15 @@ export class ShareLinkDialogComponent {
       recipientEmail: this.recipientEmail,
       expiryHours: 24
     }).subscribe({
-      next: (response) => {
+      next: () => {
         this.isSending = false;
         this.emailSent = true;
-        this.snackBar.open(`Email sent to ${this.recipientEmail}`, 'Close', {
-          duration: 3000
-        });
+        this.snackBar.open(`Email sent to ${this.recipientEmail}`, 'Close', { duration: 3000 });
       },
       error: (error) => {
         this.isSending = false;
-        console.error('Error sending email:', error);
-        this.snackBar.open('Failed to send email. Please try again.', 'Close', {
-          duration: 5000
-        });
+        console.error('Email error:', error);
+        this.snackBar.open('Failed to send email', 'Close', { duration: 5000 });
       }
     });
   }

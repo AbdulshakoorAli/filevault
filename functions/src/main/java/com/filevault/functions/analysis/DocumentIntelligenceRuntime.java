@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
  * In-memory analysis cache + Document Intelligence calls (cache is per Function instance).
  */
 public final class DocumentIntelligenceRuntime {
-
     private static final String PREBUILT_DOCUMENT_MODEL = "prebuilt-document";
     private static final int SAS_EXPIRY_HOURS_FOR_ANALYSIS = 2;
 

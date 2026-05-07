@@ -1,35 +1,42 @@
-<mat-card class="upload-card">
+<mat-card class="upload-card animate-in">
   <mat-card-header>
-    <mat-card-title>Upload Document</mat-card-title>
+    <mat-card-title>
+      <mat-icon class="section-icon">upload_file</mat-icon>
+      Upload Resume
+    </mat-card-title>
+    <mat-card-subtitle>Drag & drop or browse — PDF, DOCX, images accepted</mat-card-subtitle>
   </mat-card-header>
-  
+
   <mat-card-content>
-    <div 
+    <div
       class="drop-zone"
       [class.dragging]="isDragging"
       [class.uploading]="isUploading"
       (dragover)="onDragOver($event)"
       (dragleave)="onDragLeave($event)"
       (drop)="onDrop($event)">
-      
+
       @if (isUploading) {
         <div class="upload-progress">
-          <mat-icon>cloud_upload</mat-icon>
-          <p>Uploading... {{ uploadProgress }}%</p>
+          <div class="progress-ring">
+            <mat-icon>cloud_upload</mat-icon>
+          </div>
+          <p class="progress-label">Uploading&hellip; {{ uploadProgress }}%</p>
           <mat-progress-bar mode="determinate" [value]="uploadProgress"></mat-progress-bar>
         </div>
       } @else {
-        <mat-icon class="upload-icon">cloud_upload</mat-icon>
-        <p class="drop-text">Drag & drop files here</p>
-        <p class="or-text">or</p>
-        <button mat-raised-button color="primary" (click)="fileInput.click()">
-          Browse Files
-        </button>
-        <input 
-          #fileInput 
-          type="file" 
-          hidden 
-          (change)="onFileSelected($event)">
+        <div class="idle-state">
+          <div class="drop-icon-wrapper">
+            <mat-icon class="drop-icon">cloud_upload</mat-icon>
+          </div>
+          <p class="drop-text">Drop files here</p>
+          <span class="or-divider">or</span>
+          <button mat-raised-button color="primary" (click)="fileInput.click()">
+            <mat-icon>folder_open</mat-icon>
+            Browse Files
+          </button>
+          <input #fileInput type="file" hidden (change)="onFileSelected($event)">
+        </div>
       }
     </div>
 
