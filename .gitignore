@@ -19,3 +19,5 @@ azure-settings.json
 .tools/
 azure-settings.json
 target/
+
+.env.ps1
