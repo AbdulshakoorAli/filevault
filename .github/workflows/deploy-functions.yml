@@ -70,6 +70,8 @@ jobs:
           category: "/language:java"
 
   # -------- Stage 2: Security checks (runs in parallel) --------
+  # NOTE: OWASP Dependency-Check (SCA) is intentionally disabled — it is too
+  # slow for the deploy pipeline. Re-enable when you want a full SCA gate.
   # dependency-check:
   #   name: "SCA — Dependency Check"
   #   runs-on: ubuntu-latest
@@ -110,10 +112,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # -------- Stage 3: Deploy (only if security passed) --------
+  # Gates: build + CodeQL (SAST) + Gitleaks (secret scan).
+  # OWASP Dependency-Check is disabled above, so it is NOT in `needs`.
   deploy:
     name: "Deploy to Azure"
     runs-on: ubuntu-latest
-    needs: [build, dependency-check, secret-scan]
+    # needs: [build, dependency-check, secret-scan]
+    needs: [build, codeql, secret-scan]
     steps:
       - name: Download build artifact
         uses: actions/download-artifact@v4
