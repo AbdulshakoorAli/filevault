@@ -3,6 +3,7 @@ package com.filevault.functions.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import com.filevault.functions.dto.JobFitAnalysisPayload;
 
 public class DocumentAnalysisPayload {
     private String blobName;
@@ -12,6 +13,7 @@ public class DocumentAnalysisPayload {
     private List<ExtractedTablePayload> extractedTables;
     private int pageCount;
     private LocalDateTime analyzedAt;
+    private JobFitAnalysisPayload jobFitAnalysis;
 
     public String getBlobName() {
         return blobName;
@@ -68,4 +70,13 @@ public class DocumentAnalysisPayload {
     public void setAnalyzedAt(LocalDateTime analyzedAt) {
         this.analyzedAt = analyzedAt;
     }
+
+    public JobFitAnalysisPayload getJobFitAnalysis() {
+        return jobFitAnalysis;
+    }
+
+    public void setJobFitAnalysis(JobFitAnalysisPayload jobFitAnalysis) {
+        this.jobFitAnalysis = jobFitAnalysis;
+    }
+
 }

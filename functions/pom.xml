@@ -17,9 +17,9 @@
         <azure.functions.maven.plugin.version>1.31.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.1.0</azure.functions.java.library.version>
         <!-- Staging folder under target/azure-functions/ — must match CI package path in deploy-functions.yml -->
-        <functionAppName>filevault-functions</functionAppName>
-        <functionResourceGroup>YOUR_RESOURCE_GROUP</functionResourceGroup>
-        <functionRegion>westeurope</functionRegion>
+        <functionAppName>filevault-functions-app</functionAppName>
+        <functionResourceGroup>filevault-rg</functionResourceGroup>
+        <functionRegion>southeastasia</functionRegion>
     </properties>
 
     <dependencyManagement>

@@ -12,10 +12,10 @@ export class DocumentIntelligenceService {
 
   constructor(private http: HttpClient) {}
 
-  analyzeDocument(blobName: string): Observable<DocumentAnalysisResult> {
+  analyzeDocument(blobName: string, jobDescription?: string): Observable<DocumentAnalysisResult> {
     return this.http.post<DocumentAnalysisResult>(
       `${this.apiUrl}/${encodeURIComponent(blobName)}/analyze`,
-      {}
+      { jobDescription: jobDescription ?? '' }
     );
   }
 
