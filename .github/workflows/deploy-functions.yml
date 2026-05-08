@@ -17,6 +17,7 @@ on:
 
 permissions:
   contents: read
+  actions: read # download-artifact@v4 (some org default token policies require this)
   security-events: write
 
 jobs:
@@ -41,7 +42,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: function-package
-          path: functions/target/azure-functions/filevault-functions
+          # Must match <functionAppName> in functions/pom.xml (azure-functions-maven-plugin staging dir)
+          path: functions/target/azure-functions/filevault-functions-app
+          if-no-files-found: error
 
   codeql:
     name: "SAST — CodeQL"
