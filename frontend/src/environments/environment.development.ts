@@ -3,4 +3,3 @@ export const environment = {
   /** Base URL for the documents API (Azure Functions). Must end with `/api/documents`. */
   documentsApiUrl: 'https://filevault-functions-app.azurewebsites.net/api/documents',
 };
-
