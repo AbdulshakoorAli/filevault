@@ -27,7 +27,7 @@ public class HealthFunction {
             final ExecutionContext context) {
         return request.createResponseBuilder(HttpStatus.OK)
                 .header("Content-Type", "application/json")
-                .body("{\"status\":\"okthanksforchecking\",\"service\":\"filevault-functions\"}")
+                .body("{\"status\":\"okthanks\",\"service\":\"filevault-functions\"}")
                 .build();
     }
 }
