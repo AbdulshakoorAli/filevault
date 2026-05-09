@@ -82,7 +82,10 @@
           <h4>Skill Match</h4>
           @if (analysis.jobFitAnalysis.skillMatch.matched.length > 0) {
             <div class="skill-group">
-              <span class="skill-group-label matched-label">✅ Matched</span>
+              <span class="skill-group-label matched-label">
+                <mat-icon class="label-icon">check_circle</mat-icon>
+                Matched
+              </span>
               <div class="chips">
                 @for (skill of analysis.jobFitAnalysis.skillMatch.matched; track $index) {
                   <span class="chip chip-matched">{{ skill }}</span>
@@ -92,7 +95,10 @@
           }
           @if (analysis.jobFitAnalysis.skillMatch.missing.length > 0) {
             <div class="skill-group">
-              <span class="skill-group-label missing-label">❌ Missing</span>
+              <span class="skill-group-label missing-label">
+                <mat-icon class="label-icon">cancel</mat-icon>
+                Missing
+              </span>
               <div class="chips">
                 @for (skill of analysis.jobFitAnalysis.skillMatch.missing; track $index) {
                   <span class="chip chip-missing">{{ skill }}</span>
@@ -102,7 +108,10 @@
           }
           @if (analysis.jobFitAnalysis.skillMatch.bonus.length > 0) {
             <div class="skill-group">
-              <span class="skill-group-label bonus-label">⭐ Bonus</span>
+              <span class="skill-group-label bonus-label">
+                <mat-icon class="label-icon">star</mat-icon>
+                Bonus
+              </span>
               <div class="chips">
                 @for (skill of analysis.jobFitAnalysis.skillMatch.bonus; track $index) {
                   <span class="chip chip-bonus">{{ skill }}</span>
@@ -117,40 +126,79 @@
           <h4>Education</h4>
           <div class="eval-grid">
             <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.educationEvaluation.meetsRequirement" [class.fail]="!analysis.jobFitAnalysis.educationEvaluation.meetsRequirement">
-              {{ analysis.jobFitAnalysis.educationEvaluation.meetsRequirement ? '✅' : '❌' }} Meets Requirement
+              @if (analysis.jobFitAnalysis.educationEvaluation.meetsRequirement) {
+                <mat-icon class="eval-icon pass">check_circle</mat-icon>
+              } @else {
+                <mat-icon class="eval-icon fail">cancel</mat-icon>
+              }
+              Meets Requirement
             </span>
             <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.educationEvaluation.degreeRelevant" [class.fail]="!analysis.jobFitAnalysis.educationEvaluation.degreeRelevant">
-              {{ analysis.jobFitAnalysis.educationEvaluation.degreeRelevant ? '✅' : '❌' }} Degree Relevant
+              @if (analysis.jobFitAnalysis.educationEvaluation.degreeRelevant) {
+                <mat-icon class="eval-icon pass">check_circle</mat-icon>
+              } @else {
+                <mat-icon class="eval-icon fail">cancel</mat-icon>
+              }
+              Degree Relevant
             </span>
             <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.educationEvaluation.isComplete" [class.fail]="!analysis.jobFitAnalysis.educationEvaluation.isComplete">
-              {{ analysis.jobFitAnalysis.educationEvaluation.isComplete ? '✅' : '❌' }} Complete
+              @if (analysis.jobFitAnalysis.educationEvaluation.isComplete) {
+                <mat-icon class="eval-icon pass">check_circle</mat-icon>
+              } @else {
+                <mat-icon class="eval-icon fail">cancel</mat-icon>
+              }
+              Complete
             </span>
           </div>
           @if (analysis.jobFitAnalysis.educationEvaluation.certificationsFound.length > 0) {
             <p class="eval-note">Certifications: {{ analysis.jobFitAnalysis.educationEvaluation.certificationsFound.join(', ') }}</p>
           }
-          <p class="eval-note">{{ analysis.jobFitAnalysis.educationEvaluation.notes }}</p>
+          <p class="eval-note italic">{{ analysis.jobFitAnalysis.educationEvaluation.notes }}</p>
         </div>
 
         <!-- Experience -->
         <div class="jf-section">
           <h4>Experience</h4>
           <div class="eval-grid">
-            <span class="eval-item">📅 {{ analysis.jobFitAnalysis.experienceEvaluation.yearsFound }} years found</span>
+            <span class="eval-item">
+              <mat-icon class="eval-icon neutral">calendar_today</mat-icon>
+              {{ analysis.jobFitAnalysis.experienceEvaluation.yearsFound }} years found
+            </span>
             <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.experienceEvaluation.meetsRequirement" [class.fail]="!analysis.jobFitAnalysis.experienceEvaluation.meetsRequirement">
-              {{ analysis.jobFitAnalysis.experienceEvaluation.meetsRequirement ? '✅' : '❌' }} Meets Requirement
+              @if (analysis.jobFitAnalysis.experienceEvaluation.meetsRequirement) {
+                <mat-icon class="eval-icon pass">check_circle</mat-icon>
+              } @else {
+                <mat-icon class="eval-icon fail">cancel</mat-icon>
+              }
+              Meets Requirement
             </span>
             <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.experienceEvaluation.domainRelevant" [class.fail]="!analysis.jobFitAnalysis.experienceEvaluation.domainRelevant">
-              {{ analysis.jobFitAnalysis.experienceEvaluation.domainRelevant ? '✅' : '❌' }} Domain Relevant
+              @if (analysis.jobFitAnalysis.experienceEvaluation.domainRelevant) {
+                <mat-icon class="eval-icon pass">check_circle</mat-icon>
+              } @else {
+                <mat-icon class="eval-icon fail">cancel</mat-icon>
+              }
+              Domain Relevant
             </span>
             <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.experienceEvaluation.achievementsQuantified" [class.fail]="!analysis.jobFitAnalysis.experienceEvaluation.achievementsQuantified">
-              {{ analysis.jobFitAnalysis.experienceEvaluation.achievementsQuantified ? '✅' : '❌' }} Achievements Quantified
+              @if (analysis.jobFitAnalysis.experienceEvaluation.achievementsQuantified) {
+                <mat-icon class="eval-icon pass">check_circle</mat-icon>
+              } @else {
+                <mat-icon class="eval-icon fail">cancel</mat-icon>
+              }
+              Achievements Quantified
             </span>
-            <span class="eval-item" [class.fail]="analysis.jobFitAnalysis.experienceEvaluation.employmentGapsFound">
-              {{ analysis.jobFitAnalysis.experienceEvaluation.employmentGapsFound ? '⚠️ Gaps Found' : '✅ No Gaps' }}
+            <span class="eval-item" [class.pass]="!analysis.jobFitAnalysis.experienceEvaluation.employmentGapsFound" [class.fail]="analysis.jobFitAnalysis.experienceEvaluation.employmentGapsFound">
+              @if (analysis.jobFitAnalysis.experienceEvaluation.employmentGapsFound) {
+                <mat-icon class="eval-icon warn">warning</mat-icon>
+                Gaps Found
+              } @else {
+                <mat-icon class="eval-icon pass">check_circle</mat-icon>
+                No Gaps
+              }
             </span>
           </div>
-          <p class="eval-note">{{ analysis.jobFitAnalysis.experienceEvaluation.notes }}</p>
+          <p class="eval-note italic">{{ analysis.jobFitAnalysis.experienceEvaluation.notes }}</p>
         </div>
 
         <!-- Completeness -->
@@ -158,25 +206,60 @@
           <h4>Resume Completeness</h4>
           <div class="eval-grid">
             <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.completenessCheck.hasContactInfo" [class.fail]="!analysis.jobFitAnalysis.completenessCheck.hasContactInfo">
-              {{ analysis.jobFitAnalysis.completenessCheck.hasContactInfo ? '✅' : '❌' }} Contact Info
+              @if (analysis.jobFitAnalysis.completenessCheck.hasContactInfo) {
+                <mat-icon class="eval-icon pass">check_circle</mat-icon>
+              } @else {
+                <mat-icon class="eval-icon fail">cancel</mat-icon>
+              }
+              Contact Info
             </span>
             <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.completenessCheck.hasSummary" [class.fail]="!analysis.jobFitAnalysis.completenessCheck.hasSummary">
-              {{ analysis.jobFitAnalysis.completenessCheck.hasSummary ? '✅' : '❌' }} Summary
+              @if (analysis.jobFitAnalysis.completenessCheck.hasSummary) {
+                <mat-icon class="eval-icon pass">check_circle</mat-icon>
+              } @else {
+                <mat-icon class="eval-icon fail">cancel</mat-icon>
+              }
+              Summary
             </span>
             <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.completenessCheck.hasWorkExperience" [class.fail]="!analysis.jobFitAnalysis.completenessCheck.hasWorkExperience">
-              {{ analysis.jobFitAnalysis.completenessCheck.hasWorkExperience ? '✅' : '❌' }} Work Experience
+              @if (analysis.jobFitAnalysis.completenessCheck.hasWorkExperience) {
+                <mat-icon class="eval-icon pass">check_circle</mat-icon>
+              } @else {
+                <mat-icon class="eval-icon fail">cancel</mat-icon>
+              }
+              Work Experience
             </span>
             <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.completenessCheck.hasSkills" [class.fail]="!analysis.jobFitAnalysis.completenessCheck.hasSkills">
-              {{ analysis.jobFitAnalysis.completenessCheck.hasSkills ? '✅' : '❌' }} Skills
+              @if (analysis.jobFitAnalysis.completenessCheck.hasSkills) {
+                <mat-icon class="eval-icon pass">check_circle</mat-icon>
+              } @else {
+                <mat-icon class="eval-icon fail">cancel</mat-icon>
+              }
+              Skills
             </span>
             <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.completenessCheck.hasEducation" [class.fail]="!analysis.jobFitAnalysis.completenessCheck.hasEducation">
-              {{ analysis.jobFitAnalysis.completenessCheck.hasEducation ? '✅' : '❌' }} Education
+              @if (analysis.jobFitAnalysis.completenessCheck.hasEducation) {
+                <mat-icon class="eval-icon pass">check_circle</mat-icon>
+              } @else {
+                <mat-icon class="eval-icon fail">cancel</mat-icon>
+              }
+              Education
             </span>
             <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.completenessCheck.hasCertifications" [class.fail]="!analysis.jobFitAnalysis.completenessCheck.hasCertifications">
-              {{ analysis.jobFitAnalysis.completenessCheck.hasCertifications ? '✅' : '❌' }} Certifications
+              @if (analysis.jobFitAnalysis.completenessCheck.hasCertifications) {
+                <mat-icon class="eval-icon pass">check_circle</mat-icon>
+              } @else {
+                <mat-icon class="eval-icon fail">cancel</mat-icon>
+              }
+              Certifications
             </span>
             <span class="eval-item" [class.pass]="analysis.jobFitAnalysis.completenessCheck.hasProjects" [class.fail]="!analysis.jobFitAnalysis.completenessCheck.hasProjects">
-              {{ analysis.jobFitAnalysis.completenessCheck.hasProjects ? '✅' : '❌' }} Projects
+              @if (analysis.jobFitAnalysis.completenessCheck.hasProjects) {
+                <mat-icon class="eval-icon pass">check_circle</mat-icon>
+              } @else {
+                <mat-icon class="eval-icon fail">cancel</mat-icon>
+              }
+              Projects
             </span>
           </div>
         </div>

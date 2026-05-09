@@ -79,9 +79,9 @@ export class DocumentAnalysisDialogComponent implements OnInit {
   }
 
   getAtsColor(score: number): string {
-    if (score >= 75) return '#4caf50';
-    if (score >= 50) return '#ff9800';
-    return '#f44336';
+    if (score >= 75) return 'var(--success)';
+    if (score >= 50) return '#fbbf24';
+    return 'var(--danger)';
   }
 
   private loadExistingAnalysis(): void {
